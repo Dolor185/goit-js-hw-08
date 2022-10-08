@@ -5,9 +5,10 @@ const refs = {
     textarea: document.querySelector('.feedback-form textarea'),
 }
 
-const formData = {}
+let formData = {}
 const STORAGE_KEY= "feedback-form-state"
 const userData = JSON.parse(localStorage.getItem(STORAGE_KEY))
+
 
 onOpenPage()
 refs.form.addEventListener('input', throttle(onFormInput, 500))
@@ -15,24 +16,27 @@ refs.form.addEventListener('input', throttle(onFormInput, 500))
 function onFormInput(event) {
 formData[event.target.name]= event.target.value
 
-localStorage.setItem(STORAGE_KEY, JSON.stringify(formData))
+localStorage.setItem(STORAGE_KEY, JSON.stringify({...userData,...formData}))
 }
 
-
 function onOpenPage () {   
-    if(!userData){
-        return
-    }
-  refs.input.value = userData.email
-  refs.textarea.value = userData.message
+   if(userData?.email){
+    refs.input.value= userData.email
+   }
+   if(userData?.message){
+    refs.textarea.value = userData.message
+   }
 }
 
 refs.form.addEventListener('submit',e=>{
     e.preventDefault()
     e.currentTarget.reset();
+    console.log(formData)
     localStorage.removeItem(STORAGE_KEY)
-    console.log(userData)
+    formData = {}
+    
 
 })
 
-export default refs.form
+
+export default refs

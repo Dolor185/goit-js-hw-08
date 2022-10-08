@@ -10,6 +10,15 @@ const onPlay = function(data) {
     localStorage.setItem(STORAGE_KEY, data.seconds)
 };
 
-player.on('timeupdate', throttle(onPlay, 200));
+player.on('timeupdate', throttle(onPlay, 1000));
 
-player.setCurrentTime(localStorage.getItem(STORAGE_KEY))
+const initPage = () => {
+    let currentTime = localStorage.getItem(STORAGE_KEY)
+    if(currentTime){
+        return player.setCurrentTime(currentTime)
+    }
+
+}
+
+initPage()
+
